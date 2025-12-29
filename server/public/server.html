@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 640px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        .chat-header {
+            padding: 14px;
+            background: #4f46e5;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        #msgBox {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            background: #f9fafb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            max-width: 80%;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .sent {
+            background: #4f46e5;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .received {
+            background: #e5e7eb;
+            color: #111827;
+            align-self: flex-start;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 8px;
+            padding: 10px;
+            border-top: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+
+        #msgInput {
+            flex: 1;
+            padding: 12px;
+            border-radius: 20px;
+            border: 1px solid #d1d5db;
+            outline: none;
+            font-size: 15px;
+        }
+
+        #sendBtn {
+            padding: 0 18px;
+            background: #4f46e5;
+            border: none;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        #sendBtn:hover {
+            background: #4338ca;
+        }
+
+        /* Mobile-specific tweaks */
+        @media (max-width: 480px) {
+            body {
+                background: #ffffff;
+            }
+
+            .chat-container {
+                height: 100vh;
+                max-height: 100vh;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .chat-header {
+                font-size: 16px;
+            }
+
+            .message {
+                font-size: 13px;
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <div class="chat-header">Chat App</div>
+
+        <div id="msgBox"></div>
+
+        <div class="chat-input">
+            <input type="text" id="msgInput" placeholder="Type a message..." />
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- by using script tag we use above line to connect frontemed with backened      -->
+
+
+
+    <script>
+        const socket = io();
+        const msgInput = document.getElementById('msgInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const msgBox = document.getElementById('msgBox');
+        //send message from client to server
+
+        sendBtn.addEventListener('click', () => {
+            socket.emit('messageFromClient', msgInput.value);
+        });
+
+
+
+
+
+
+
+        // receive message from server
+        socket.on('messageFromServer', (msg) => {
+            const p = document.createElement('p');
+            p.textContent = msg;
+            msgBox.appendChild(p);
+            // console.log(msg);
+        });
+
+
+    </script>
+</body>
+
+</html>
